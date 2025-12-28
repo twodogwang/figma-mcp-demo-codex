@@ -1,0 +1,19 @@
+{
+  "name": "@apps/vue-app",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "dev": "vite",
+    "build": "vite build",
+    "preview": "vite preview"
+  },
+  "dependencies": {
+    "vue": "^2.7.16"
+  },
+  "devDependencies": {
+    "@vitejs/plugin-vue2": "^2.3.0",
+    "typescript": "^5.5.4",
+    "vite": "^5.4.0",
+    "vue-template-compiler": "^2.7.16"
+  }
+}

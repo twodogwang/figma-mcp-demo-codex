@@ -1,0 +1,13 @@
+{
+  "name": "figma-mcp-compare",
+  "private": true,
+  "packageManager": "pnpm@9.6.0",
+  "scripts": {
+    "lint": "eslint .",
+    "format": "eslint . --fix"
+  },
+  "devDependencies": {
+    "@antfu/eslint-config": "^2.24.0",
+    "eslint": "^9.7.0"
+  }
+}
