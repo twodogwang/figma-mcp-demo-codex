@@ -1,172 +1,269 @@
 <template>
   <div class="page">
     <div class="container">
-      <div class="tabs">
-        <div v-for="tab in tabs" :key="tab.label" class="tab-chip">
-          <span>{{ tab.label }}</span>
-          <span class="tab-count">({{ tab.count }})</span>
-        </div>
-      </div>
+      <header class="title">
+        <span class="title-icon" aria-hidden="true">*</span>
+        <h1>代码演示</h1>
+      </header>
 
-      <div class="table-header">
-        <div class="cell cell-grow">Product Information</div>
-        <div class="cell cell-160 center">Seller</div>
-        <div class="cell cell-200 right">
-          <span>Total Amount</span>
-          <img class="icon-16" :src="imgHeaderHelp" alt="" />
-        </div>
-        <div class="cell cell-200">Purchase Order ID</div>
-        <div class="cell cell-160">Warehouse Code</div>
-        <div class="cell cell-210">Shipping Method</div>
-        <div class="cell cell-200 right">
-          <span>Order Total</span>
-          <img class="icon-16" :src="imgHeaderHelp" alt="" />
-        </div>
-      </div>
+      <section class="block">
+        <h2>基础用法</h2>
+        <div class="demo-card">
+          <FilterGroupProvider :cols="3" :gap-x="24" :gap-y="12" label-position="top">
+            <template #default="{ layout, actions }">
+              <div class="filter-grid" :style="gridStyle(layout)">
+                <FilterField name="keyword" label="Input title">
+                  <template #default="{ value, setValue, label, id }">
+                    <div :class="fieldClass(layout)">
+                      <label :for="id">{{ label }}</label>
+                      <input
+                        :id="id"
+                        type="text"
+                        placeholder="Please Input"
+                        :value="value"
+                        @input="setValue($event.target.value)"
+                      />
+                    </div>
+                  </template>
+                </FilterField>
 
-      <div class="cards">
-        <div v-for="card in cards" :key="card.key" class="card">
-          <div class="card-header">
-            <div class="card-meta">
-              <div class="meta-block">
-                <span>Shipment ID: {{ card.id }}</span>
-                <span class="badge-dot"></span>
+                <FilterField name="type" label="Select title">
+                  <template #default="{ value, setValue, label, id }">
+                    <div :class="fieldClass(layout)">
+                      <label :for="id">{{ label }}</label>
+                      <select
+                        :id="id"
+                        :value="value"
+                        @change="setValue($event.target.value)"
+                      >
+                        <option value="" disabled>Please select</option>
+                        <option value="a">Option A</option>
+                        <option value="b">Option B</option>
+                        <option value="c">Option C</option>
+                      </select>
+                    </div>
+                  </template>
+                </FilterField>
+
+                <FilterField name="date" label="Date">
+                  <template #default="{ value, setValue, label, id }">
+                    <div :class="fieldClass(layout)">
+                      <label :for="id">{{ label }}</label>
+                      <input
+                        :id="id"
+                        type="text"
+                        placeholder="Select Date"
+                        :value="value"
+                        @input="setValue($event.target.value)"
+                      />
+                    </div>
+                  </template>
+                </FilterField>
               </div>
-              <div class="meta-block meta-italic">{{ card.channel }}</div>
-              <span :class="['status-tag', statusClass(card.status.tone)]">
-                {{ card.status.label }}
-              </span>
-            </div>
-            <div class="card-actions">
-              <div class="pickup">
-                <span class="checkbox">
-                  <img class="icon-12" :src="imgCheck" alt="" />
-                </span>
-                <span>Carrier Pickup Scheduled</span>
+
+              <div class="actions" :class="actionClass(layout)">
+                <button class="btn-primary" type="button" @click="actions.submit">Filter</button>
+                <button class="btn-icon" type="button" title="Download">
+                  <span class="icon">&#8595;</span>
+                </button>
               </div>
-              <button class="link-btn">View Details &gt;</button>
-            </div>
-          </div>
+            </template>
+          </FilterGroupProvider>
+        </div>
+      </section>
 
-          <div class="card-row">
-            <div class="cell cell-grow product">
-              <img class="product-img" :src="imgProduct" alt="" />
-              <div class="product-text">
-                <p>
-                  Demon Skull,Suitable for Outdoor Fireplace and Fire Pit, Halloween Decoration
-                </p>
-                <div class="product-meta">
-                  <span>W2061254313</span>
-                  <strong>x2</strong>
-                  <span class="tag-box"></span>
-                </div>
+      <section class="block">
+        <h2>支持配置重置功能</h2>
+        <div class="demo-card">
+          <FilterGroupProvider :cols="2" :gap-x="24" :gap-y="16" label-position="top">
+            <template #default="{ layout, actions }">
+              <div class="filter-grid" :style="gridStyle(layout)">
+                <FilterField name="keyword" label="Input title">
+                  <template #default="{ value, setValue, label, id }">
+                    <div :class="fieldClass(layout)">
+                      <label :for="id">{{ label }}</label>
+                      <input
+                        :id="id"
+                        type="text"
+                        placeholder="Please Input"
+                        :value="value"
+                        @input="setValue($event.target.value)"
+                      />
+                    </div>
+                  </template>
+                </FilterField>
+
+                <FilterField name="type" label="Select title">
+                  <template #default="{ value, setValue, label, id }">
+                    <div :class="fieldClass(layout)">
+                      <label :for="id">{{ label }}</label>
+                      <select
+                        :id="id"
+                        :value="value"
+                        @change="setValue($event.target.value)"
+                      >
+                        <option value="" disabled>Please select</option>
+                        <option value="a">Option A</option>
+                        <option value="b">Option B</option>
+                        <option value="c">Option C</option>
+                      </select>
+                    </div>
+                  </template>
+                </FilterField>
+
+                <FilterField name="date" label="Date">
+                  <template #default="{ value, setValue, label, id }">
+                    <div :class="fieldClass(layout)">
+                      <label :for="id">{{ label }}</label>
+                      <input
+                        :id="id"
+                        type="text"
+                        placeholder="Select Date"
+                        :value="value"
+                        @input="setValue($event.target.value)"
+                      />
+                    </div>
+                  </template>
+                </FilterField>
+
+                <FilterField name="status" label="Status">
+                  <template #default="{ value, setValue, label, id }">
+                    <div :class="fieldClass(layout)">
+                      <label :for="id">{{ label }}</label>
+                      <select
+                        :id="id"
+                        :value="value"
+                        @change="setValue($event.target.value)"
+                      >
+                        <option value="" disabled>Please select</option>
+                        <option value="pending">Pending</option>
+                        <option value="processing">Processing</option>
+                        <option value="done">Done</option>
+                      </select>
+                    </div>
+                  </template>
+                </FilterField>
               </div>
-            </div>
-            <div class="cell cell-160 center">--</div>
-            <div class="cell cell-200 right bold">--</div>
-            <div class="cell cell-200">--</div>
-            <div class="cell cell-160">W206-WA1</div>
-            <div class="cell cell-210">{{ card.shippingMethod }}</div>
-            <div class="cell cell-200 right bold">--</div>
-          </div>
 
-          <div class="card-footer">
-            <div class="upload-time">
-              <span>Upload Time</span>
-              <img class="icon-14" :src="imgHelp" alt="" />
-              <span>2025-11-02 00:00:00</span>
-            </div>
-            <div class="footer-actions">
-              <button class="ghost-btn">
-                More
-                <img class="icon-16" :src="imgArrowDown" alt="" />
-              </button>
-              <button class="primary-btn">{{ card.actionPrimary }}</button>
-            </div>
-          </div>
+              <div class="actions" :class="actionClass(layout)">
+                <button class="btn-primary" type="button" @click="actions.submit">Filter</button>
+                <button class="btn-ghost" type="button" @click="actions.reset">Reset</button>
+                <button class="btn-icon" type="button" title="Download">
+                  <span class="icon">&#8595;</span>
+                </button>
+              </div>
+            </template>
+          </FilterGroupProvider>
         </div>
-      </div>
+      </section>
 
-      <div class="pagination">
-        <div class="pager">
-          <button class="page-btn disabled">&lt;</button>
-          <button class="page-btn active">1</button>
-          <button class="page-btn">2</button>
-          <button class="page-btn">3</button>
-          <button class="page-btn">4</button>
-          <button class="page-btn">5</button>
-          <button class="page-btn">6</button>
-          <button class="page-btn">...</button>
-          <button class="page-btn">100</button>
-          <button class="page-btn">&gt;</button>
+      <section class="block">
+        <h2>支持自定义设置下载字段</h2>
+        <div class="demo-card">
+          <FilterGroupProvider
+            :cols="2"
+            :gap-x="32"
+            :gap-y="20"
+            label-position="inline"
+            :label-width="90"
+          >
+            <template #default="{ layout, actions }">
+              <div class="filter-grid" :style="gridStyle(layout)">
+                <FilterField name="keyword" label="Input title">
+                  <template #default="{ value, setValue, label, id }">
+                    <div :class="fieldClass(layout)">
+                      <label :for="id" :style="labelStyle(layout)">{{ label }}</label>
+                      <input
+                        :id="id"
+                        type="text"
+                        placeholder="Please Input"
+                        :value="value"
+                        @input="setValue($event.target.value)"
+                      />
+                    </div>
+                  </template>
+                </FilterField>
+
+                <FilterField name="type" label="Select title">
+                  <template #default="{ value, setValue, label, id }">
+                    <div :class="fieldClass(layout)">
+                      <label :for="id" :style="labelStyle(layout)">{{ label }}</label>
+                      <select
+                        :id="id"
+                        :value="value"
+                        @change="setValue($event.target.value)"
+                      >
+                        <option value="" disabled>Please select</option>
+                        <option value="a">Option A</option>
+                        <option value="b">Option B</option>
+                        <option value="c">Option C</option>
+                      </select>
+                    </div>
+                  </template>
+                </FilterField>
+
+                <FilterField name="date" label="Date">
+                  <template #default="{ value, setValue, label, id }">
+                    <div :class="fieldClass(layout)">
+                      <label :for="id" :style="labelStyle(layout)">{{ label }}</label>
+                      <input
+                        :id="id"
+                        type="text"
+                        placeholder="Select Date"
+                        :value="value"
+                        @input="setValue($event.target.value)"
+                      />
+                    </div>
+                  </template>
+                </FilterField>
+              </div>
+
+              <div class="actions" :class="actionClass(layout)">
+                <button class="btn-primary" type="button" @click="actions.submit">Filter</button>
+                <button class="btn-ghost" type="button" @click="actions.reset">Reset</button>
+                <button class="btn-combo" type="button" title="Download settings">
+                  <span class="icon">&#8595;</span>
+                  <span class="divider"></span>
+                  <span class="icon">&#9776;</span>
+                </button>
+              </div>
+            </template>
+          </FilterGroupProvider>
         </div>
-        <button class="ghost-btn">
-          10 / page
-          <img class="icon-16" :src="imgArrowDown" alt="" />
-        </button>
-        <span>1-10 of 1000</span>
-      </div>
+      </section>
     </div>
   </div>
 </template>
 
 <script lang="ts">
-import Vue from 'vue';
+import { defineComponent } from 'vue';
+import FilterGroupProvider from './components/filter-group/FilterGroupProvider.vue';
+import FilterField from './components/filter-group/FilterField.vue';
+import type { FilterGroupLayout } from './components/filter-group/useFilterGroup';
 
-export default Vue.extend({
+export default defineComponent({
   name: 'App',
-  data() {
-    return {
-      imgProduct:
-        'http://localhost:3845/assets/1af8b1df9b46913faa5026b153bb6a6e736109b8.png',
-      imgHelp:
-        'http://localhost:3845/assets/01a96663d18d7e459fd0b1c402f1e13cf6989e84.svg',
-      imgHeaderHelp:
-        'http://localhost:3845/assets/e6672b7da6bf12a8c996de7ed28d5c34002ae441.svg',
-      imgArrowDown:
-        'http://localhost:3845/assets/079374e6d5269e5dc291274793e8ef2783f4ef90.svg',
-      imgCheck:
-        'http://localhost:3845/assets/3d0b0a98d5be93da89735f237a1c2c52c997d047.svg',
-      tabs: [
-        { label: 'ALL', count: 304 },
-        { label: 'Carton &Shipping Label Pending', count: 83 },
-        { label: 'Unpaid', count: 8 },
-        { label: 'Being Processed', count: 15 },
-        { label: 'BOL Pending&Awaiting Pickup', count: 23 },
-      ],
-      cards: [
-        {
-          key: 'c1',
-          id: '78718521689',
-          channel: 'Amazon - FBA Pickup',
-          status: { label: 'Carton & Shipping Label Pending', tone: 'danger' },
-          shippingMethod: 'Small Parcel',
-          actionPrimary: 'Upload Carton and Shipping Labels',
-        },
-        {
-          key: 'c2',
-          id: '78718521689',
-          channel: 'Amazon - FBA Pickup',
-          status: { label: 'Unpaid', tone: 'warning' },
-          shippingMethod: 'Trucking',
-          actionPrimary: 'Pay',
-        },
-        {
-          key: 'c3',
-          id: '78718521689',
-          channel: 'Other Pickup',
-          status: { label: 'Being Processed', tone: 'success' },
-          shippingMethod: 'Small Parcel',
-          actionPrimary: 'View Carton & Shipping Labels',
-        },
-      ],
-    };
-  },
+  components: { FilterGroupProvider, FilterField },
   methods: {
-    statusClass(tone: string) {
-      if (tone === 'danger') return 'status-danger';
-      if (tone === 'warning') return 'status-warning';
-      return 'status-success';
+    gridStyle(layout: FilterGroupLayout) {
+      return {
+        display: 'grid',
+        gridTemplateColumns: `repeat(${layout.cols}, minmax(0, 1fr))`,
+        columnGap: `${layout.gapX}px`,
+        rowGap: `${layout.gapY}px`,
+      };
+    },
+    fieldClass(layout: FilterGroupLayout) {
+      return layout.labelPosition === 'inline' ? 'field field-inline' : 'field field-top';
+    },
+    actionClass(layout: FilterGroupLayout) {
+      return layout.actionAlign === 'right' ? 'actions-right' : 'actions-left';
+    },
+    labelStyle(layout: FilterGroupLayout) {
+      if (layout.labelPosition !== 'inline' || !layout.labelWidth) {
+        return {};
+      }
+      return { width: layout.labelWidth };
     },
   },
 });
@@ -181,307 +278,164 @@ export default Vue.extend({
 }
 
 .container {
-  max-width: 1600px;
-  padding: 20px;
+  max-width: 1100px;
   margin: 0 auto;
+  padding: 20px;
 }
 
-.tabs {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 16px;
-  margin-bottom: 16px;
-}
-
-.tab-chip {
-  background: #f2f2f2;
-  border-radius: 999px;
-  padding: 9px 16px;
-  font-size: 14px;
-  line-height: 18px;
-  white-space: nowrap;
-}
-
-.tab-count {
-  font-weight: 700;
-}
-
-.table-header {
-  display: grid;
-  grid-template-columns: 1fr 160px 200px 200px 160px 210px 200px;
-  background: #d7ddea;
-  font-size: 12px;
-  line-height: 16px;
-  font-weight: 700;
-}
-
-.cell {
-  padding: 10px;
+.title {
   display: flex;
   align-items: center;
-  gap: 8px;
+  gap: 10px;
+  margin-bottom: 18px;
 }
 
-.cell-grow {
-  justify-content: flex-start;
-}
-
-.cell-160 {
-  width: 160px;
-}
-
-.cell-200 {
-  width: 200px;
-}
-
-.cell-210 {
-  width: 210px;
-}
-
-.center {
+.title-icon {
+  width: 28px;
+  height: 28px;
+  border-radius: 6px;
+  border: 1px solid #c1c1c1;
+  display: inline-flex;
+  align-items: center;
   justify-content: center;
+  font-size: 16px;
+  color: #2861ce;
 }
 
-.right {
-  justify-content: flex-end;
-}
-
-.bold {
+.title h1 {
+  margin: 0;
+  font-size: 28px;
   font-weight: 700;
 }
 
-.icon-16 {
-  width: 16px;
-  height: 16px;
+.block {
+  margin-bottom: 24px;
 }
 
-.icon-14 {
-  width: 14px;
-  height: 14px;
+.block h2 {
+  font-size: 16px;
+  font-weight: 600;
+  margin: 0 0 12px;
 }
 
-.icon-12 {
-  width: 12px;
-  height: 12px;
+.demo-card {
+  border: 1px solid rgba(0, 0, 0, 0.1);
+  border-radius: 8px;
+  padding: 20px;
+  background: #fff;
 }
 
-.cards {
+.filter-grid {
+  width: 100%;
+}
+
+.field {
+  width: 100%;
+}
+
+.field-top {
   display: flex;
   flex-direction: column;
-  gap: 16px;
+  gap: 6px;
+}
+
+.field-inline {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+label {
+  font-size: 14px;
+  line-height: 18px;
+  color: #333;
+}
+
+input,
+select {
+  width: 100%;
+  height: 36px;
+  padding: 8px 12px;
+  border: 1px solid #c1c1c1;
+  border-radius: 4px;
+  font-size: 14px;
+  color: #333;
+  background: #fff;
+  box-sizing: border-box;
+}
+
+.actions {
+  display: flex;
+  align-items: center;
+  gap: 12px;
   margin-top: 16px;
 }
 
-.card {
-  border: 1px solid #e5e5e5;
+.actions-left {
+  justify-content: flex-start;
+}
+
+.actions-right {
+  justify-content: flex-end;
+}
+
+.btn-primary {
+  min-width: 80px;
+  height: 36px;
+  padding: 0 16px;
+  border: none;
   border-radius: 4px;
-  overflow: hidden;
+  background: #2861ce;
+  color: #fff;
+  font-size: 14px;
+  cursor: pointer;
+}
+
+.btn-ghost {
+  min-width: 80px;
+  height: 36px;
+  padding: 0 16px;
+  border: 1px solid #c1c1c1;
+  border-radius: 4px;
   background: #fff;
-}
-
-.card-header {
-  display: flex;
-  justify-content: space-between;
-  gap: 16px;
-  padding: 7px 10px;
-  background: #f7f8fa;
-  border-bottom: 1px solid #e5e5e5;
+  color: #333;
   font-size: 14px;
-  line-height: 18px;
+  cursor: pointer;
 }
 
-.card-meta {
-  display: flex;
-  align-items: center;
-  gap: 16px;
-}
-
-.meta-block {
-  display: flex;
-  align-items: center;
-  gap: 4px;
-  padding-right: 16px;
-  border-right: 1px solid #e5e5e5;
-}
-
-.meta-italic {
-  font-style: italic;
-  color: #666;
-}
-
-.badge-dot {
-  width: 18px;
-  height: 18px;
-  border-radius: 999px;
-  background: #e6f0ff;
-  display: inline-block;
-}
-
-.status-tag {
-  padding: 3px 6px;
+.btn-icon {
+  width: 36px;
+  height: 36px;
+  border: 1px solid #c1c1c1;
   border-radius: 4px;
-  font-size: 14px;
-  line-height: 18px;
-}
-
-.status-danger {
-  background: #ffeded;
-  color: #e64545;
-}
-
-.status-warning {
-  background: #fff0e6;
-  color: #f60;
-}
-
-.status-success {
-  background: #e7f7ef;
-  color: #0aad4f;
-}
-
-.card-actions {
-  display: flex;
-  align-items: center;
-  gap: 16px;
-}
-
-.pickup {
-  display: flex;
-  align-items: center;
-  gap: 8px;
-  padding-right: 16px;
-  border-right: 1px solid #e5e5e5;
-}
-
-.checkbox {
-  width: 16px;
-  height: 16px;
-  border: 1px solid #0aad4f;
-  border-radius: 3px;
-  position: relative;
+  background: #fff;
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  background: #fff;
-}
-
-.link-btn {
-  border: none;
-  background: transparent;
-  color: #2861ce;
   cursor: pointer;
 }
 
-.card-row {
-  display: grid;
-  grid-template-columns: 1fr 160px 200px 200px 160px 210px 200px;
-  border-bottom: 1px solid #e5e5e5;
-  font-size: 14px;
-  line-height: 18px;
-}
-
-.product {
-  display: flex;
-  gap: 12px;
-}
-
-.product-img {
-  width: 60px;
-  height: 60px;
+.btn-combo {
+  height: 36px;
+  padding: 0 10px;
   border: 1px solid #c1c1c1;
-  border-radius: 3px;
-  object-fit: cover;
-}
-
-.product-text p {
-  max-width: 340px;
-}
-
-.product-meta {
-  display: flex;
-  align-items: center;
-  gap: 4px;
-}
-
-.tag-box {
-  width: 16px;
-  height: 16px;
-  background: #0052d9;
-  border-radius: 2px;
-}
-
-.card-footer {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  padding: 8px 10px;
-  font-size: 14px;
-  line-height: 18px;
-}
-
-.upload-time {
-  display: flex;
-  align-items: center;
-  gap: 6px;
-}
-
-.footer-actions {
-  display: flex;
-  align-items: center;
-  gap: 12px;
-}
-
-.ghost-btn {
-  border: 1px solid #c1c1c1;
-  background: #fff;
   border-radius: 4px;
-  padding: 6px 12px;
+  background: #fff;
   display: inline-flex;
   align-items: center;
-  gap: 6px;
+  gap: 8px;
   cursor: pointer;
 }
 
-.primary-btn {
-  border: none;
-  background: #f60;
-  color: #fff;
-  border-radius: 4px;
-  padding: 6px 12px;
-  cursor: pointer;
+.icon {
+  font-size: 16px;
+  line-height: 1;
+  color: #333;
 }
 
-.pagination {
-  display: flex;
-  align-items: center;
-  justify-content: flex-end;
-  gap: 12px;
-  margin-top: 12px;
-  font-size: 14px;
-  line-height: 18px;
-}
-
-.pager {
-  display: flex;
-  align-items: center;
-}
-
-.page-btn {
-  width: 32px;
-  height: 32px;
-  border: 1px solid #c1c1c1;
-  background: #fff;
-  margin-left: -1px;
-  cursor: pointer;
-}
-
-.page-btn.active {
-  background: #333;
-  color: #fff;
-}
-
-.page-btn.disabled {
-  color: #c1c1c1;
-  cursor: not-allowed;
+.divider {
+  width: 1px;
+  height: 18px;
+  background: #c1c1c1;
 }
 </style>
