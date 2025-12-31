@@ -11,7 +11,7 @@
         <div class="demo-card">
           <FilterGroupProvider :cols="3" :gap-x="24" :gap-y="12" label-position="top">
             <template #default="{ layout, actions }">
-              <div class="filter-grid" :style="gridStyle(layout)">
+              <div class="filter-grid" :style="layout.gridStyle">
                 <FilterField name="keyword" label="Input title">
                   <template #default="{ value, setValue, label, id }">
                     <div :class="fieldClass(layout)">
@@ -59,13 +59,13 @@
                     </div>
                   </template>
                 </FilterField>
-              </div>
 
-              <div class="actions" :class="actionClass(layout)">
-                <button class="btn-primary" type="button" @click="actions.submit">Filter</button>
-                <button class="btn-icon" type="button" title="Download">
-                  <span class="icon">&#8595;</span>
-                </button>
+                <div class="actions" :class="actionClass(layout)">
+                  <button class="btn-primary" type="button" @click="actions.submit">Filter</button>
+                  <button class="btn-icon" type="button" title="Download">
+                    <span class="icon">&#8595;</span>
+                  </button>
+                </div>
               </div>
             </template>
           </FilterGroupProvider>
@@ -77,7 +77,7 @@
         <div class="demo-card">
           <FilterGroupProvider :cols="2" :gap-x="24" :gap-y="16" label-position="top">
             <template #default="{ layout, actions }">
-              <div class="filter-grid" :style="gridStyle(layout)">
+              <div class="filter-grid" :style="layout.gridStyle">
                 <FilterField name="keyword" label="Input title">
                   <template #default="{ value, setValue, label, id }">
                     <div :class="fieldClass(layout)">
@@ -143,14 +143,14 @@
                     </div>
                   </template>
                 </FilterField>
-              </div>
 
-              <div class="actions" :class="actionClass(layout)">
-                <button class="btn-primary" type="button" @click="actions.submit">Filter</button>
-                <button class="btn-ghost" type="button" @click="actions.reset">Reset</button>
-                <button class="btn-icon" type="button" title="Download">
-                  <span class="icon">&#8595;</span>
-                </button>
+                <div class="actions" :class="actionClass(layout)">
+                  <button class="btn-primary" type="button" @click="actions.submit">Filter</button>
+                  <button class="btn-ghost" type="button" @click="actions.reset">Reset</button>
+                  <button class="btn-icon" type="button" title="Download">
+                    <span class="icon">&#8595;</span>
+                  </button>
+                </div>
               </div>
             </template>
           </FilterGroupProvider>
@@ -168,7 +168,7 @@
             :label-width="90"
           >
             <template #default="{ layout, actions }">
-              <div class="filter-grid" :style="gridStyle(layout)">
+              <div class="filter-grid" :style="layout.gridStyle">
                 <FilterField name="keyword" label="Input title">
                   <template #default="{ value, setValue, label, id }">
                     <div :class="fieldClass(layout)">
@@ -216,16 +216,16 @@
                     </div>
                   </template>
                 </FilterField>
-              </div>
 
-              <div class="actions" :class="actionClass(layout)">
-                <button class="btn-primary" type="button" @click="actions.submit">Filter</button>
-                <button class="btn-ghost" type="button" @click="actions.reset">Reset</button>
-                <button class="btn-combo" type="button" title="Download settings">
-                  <span class="icon">&#8595;</span>
-                  <span class="divider"></span>
-                  <span class="icon">&#9776;</span>
-                </button>
+                <div class="actions" :class="actionClass(layout)">
+                  <button class="btn-primary" type="button" @click="actions.submit">Filter</button>
+                  <button class="btn-ghost" type="button" @click="actions.reset">Reset</button>
+                  <button class="btn-combo" type="button" title="Download settings">
+                    <span class="icon">&#8595;</span>
+                    <span class="divider"></span>
+                    <span class="icon">&#9776;</span>
+                  </button>
+                </div>
               </div>
             </template>
           </FilterGroupProvider>
@@ -245,14 +245,6 @@ export default defineComponent({
   name: 'App',
   components: { FilterGroupProvider, FilterField },
   methods: {
-    gridStyle(layout: FilterGroupLayout) {
-      return {
-        display: 'grid',
-        gridTemplateColumns: `repeat(${layout.cols}, minmax(0, 1fr))`,
-        columnGap: `${layout.gapX}px`,
-        rowGap: `${layout.gapY}px`,
-      };
-    },
     fieldClass(layout: FilterGroupLayout) {
       return layout.labelPosition === 'inline' ? 'field field-inline' : 'field field-top';
     },
@@ -327,10 +319,15 @@ export default defineComponent({
 
 .filter-grid {
   width: 100%;
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--fg-gap-y, 12px) var(--fg-gap-x, 24px);
 }
 
 .field {
-  width: 100%;
+  flex: 0 0 var(--fg-col-width, 100%);
+  min-width: var(--fg-col-width, 100%);
+  box-sizing: border-box;
 }
 
 .field-top {
@@ -368,14 +365,15 @@ select {
   display: flex;
   align-items: center;
   gap: 12px;
-  margin-top: 16px;
 }
 
 .actions-left {
+  margin-left: 0;
   justify-content: flex-start;
 }
 
 .actions-right {
+  margin-left: auto;
   justify-content: flex-end;
 }
 

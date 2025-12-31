@@ -1,5 +1,11 @@
 <script lang="ts">
-import { computed, defineComponent, getCurrentInstance, onBeforeUnmount } from 'vue';
+import {
+  computed,
+  defineComponent,
+  getCurrentInstance,
+  h,
+  onBeforeUnmount,
+} from 'vue';
 import { useFilterGroup } from './useFilterGroup';
 
 type Props = {
@@ -33,14 +39,20 @@ export default defineComponent({
 
     return () => {
       if (!slots.default) return null;
-      return slots.default({
-        value: value.value,
-        setValue: (next: unknown) => {
-          value.value = next;
-        },
-        label: props.label,
-        id,
-      });
+      const children =
+        slots.default({
+          value: value.value,
+          setValue: (next: unknown) => {
+            value.value = next;
+          },
+          label: props.label,
+          id,
+        }) ?? [];
+      return h(
+        'div',
+        { style: { display: 'contents' } },
+        children,
+      );
     };
   },
 });

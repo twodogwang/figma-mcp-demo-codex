@@ -11,6 +11,7 @@ export type FilterGroupLayout = {
   labelWidth?: string;
   rows: number;
   actionAlign: 'left' | 'right';
+  gridStyle: Record<string, string>;
 };
 
 export type FilterGroupContext = {

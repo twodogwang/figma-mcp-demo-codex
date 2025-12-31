@@ -2,6 +2,7 @@
 import {
   computed,
   defineComponent,
+  h,
   onBeforeUnmount,
   provide,
   ref,
@@ -37,6 +38,8 @@ export default defineComponent({
     const fields = ref<string[]>([]);
 
     const normalizedCols = computed(() => Math.max(1, props.cols ?? 1));
+    const normalizedGapX = computed(() => props.gapX ?? 0);
+    const normalizedGapY = computed(() => props.gapY ?? 0);
     const normalizedLabelWidth = computed(() => {
       if (props.labelWidth === undefined || props.labelWidth === null) {
         return undefined;
@@ -45,6 +48,16 @@ export default defineComponent({
         ? `${props.labelWidth}px`
         : props.labelWidth;
     });
+    const columnWidth = computed(() => {
+      if (normalizedCols.value <= 1) return '100%';
+      const totalGap = (normalizedCols.value - 1) * normalizedGapX.value;
+      return `calc((100% - ${totalGap}px) / ${normalizedCols.value})`;
+    });
+    const gridStyle = computed(() => ({
+      '--fg-col-width': columnWidth.value,
+      '--fg-gap-x': `${normalizedGapX.value}px`,
+      '--fg-gap-y': `${normalizedGapY.value}px`,
+    }));
 
     const rows = computed(() => {
       if (!fields.value.length) return 1;
@@ -53,12 +66,13 @@ export default defineComponent({
 
     const layout = computed(() => ({
       cols: normalizedCols.value,
-      gapX: props.gapX ?? 0,
-      gapY: props.gapY ?? 0,
+      gapX: normalizedGapX.value,
+      gapY: normalizedGapY.value,
       labelPosition: (props.labelPosition ?? 'top') as LabelPosition,
       labelWidth: normalizedLabelWidth.value,
       rows: rows.value,
       actionAlign: rows.value <= 1 ? 'left' : 'right',
+      gridStyle: gridStyle.value,
     }));
 
     const registerField = (name: string, defaultValue?: unknown) => {
@@ -127,11 +141,18 @@ export default defineComponent({
 
     return () => {
       if (!slots.default) return null;
-      return slots.default({
-        values: values.value,
-        layout: layout.value,
-        actions: { submit, reset, setValue, getValue },
-      });
+      const children =
+        slots.default({
+          values: values.value,
+          layout: layout.value,
+          actions: { submit, reset, setValue, getValue },
+        }) ?? [];
+      // Vue 2 needs a single root node, so we wrap slot output with display: contents.
+      return h(
+        'div',
+        { style: { display: 'contents' } },
+        children,
+      );
     };
   },
 });
